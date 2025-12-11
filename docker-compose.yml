@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  app:
+    # ================================
+    #  BUILD CONFIGURATION
+    # ================================
+    # Build from the Dockerfile in the current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Optional: Name shown in Docker Desktop
+    container_name: pki-2fa-service
+
+    # ================================
+    #  PORT MAPPING
+    # ================================
+    # Map host 8080 → container 8080
+    ports:
+      - "8080:8080"
+
+    # ================================
+    #  VOLUME MOUNTS
+    # ================================
+    volumes:
+      # Persistent storage for decrypted seed
+      - seed-data:/data
+
+      # Persistent storage for cron-generated TOTP logs
+      - cron-output:/cron
+
+      # Mount key files into container (read-only)
+      # These should NOT be inside container images for security
+      - ./Keys/student_private.pem:/app/Keys/student_private.pem:ro
+      - ./Keys/student_public.pem:/app/Keys/student_public.pem:ro
+      - ./Keys/instructor_public.pem:/app/Keys/instructor_public.pem:ro
+
+    # ================================
+    #  ENVIRONMENT VARIABLES
+    # ================================
+    # Ensures TOTP timestamps are computed correctly
+    environment:
+      - TZ=UTC
+
+    # ================================
+    #  RESTART POLICY
+    # ================================
+    restart: unless-stopped
+
+# ================================
+#  NAMED VOLUME DEFINITIONS
+# ================================
+volumes:
+  seed-data:
+  cron-output:

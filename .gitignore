@@ -1,0 +1,21 @@
+# Sensitive files
+encrypted_seed.txt
+data/seed.txt
+
+# Docker runtime folders (ignore contents but keep required cron file)
+data/
+cron/
+!cron/2fa-cron
+
+# Node dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# IDE/editor
+.vscode/
+.idea/
