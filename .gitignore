@@ -2,9 +2,12 @@
 encrypted_seed.txt
 data/seed.txt
 
-# Docker runtime folders (ignore contents but keep required cron file)
+# Docker runtime folders
 data/
-cron/
+
+# Ignore everything in cron EXCEPT required file
+cron/*
+!cron/
 !cron/2fa-cron
 
 # Node dependencies
